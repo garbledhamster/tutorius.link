@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Windows 11 Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/lucide-static@0.343.0/font/lucide.css" rel="stylesheet">
+<style>
+:root{--radius:14px;--transition:.4s cubic-bezier(.4,.2,.2,1)}
+:root[data-theme='dark']{--bg:#0f1113;--surface:#1b1d20;--text:#e5e8ee;--text-muted:#a8adb7;--accent:#0a84ff;--accent-lite:rgba(10,132,255,.15)}
+:root[data-theme='light']{--bg:#fff;--surface:#f3f5f7;--text:#21252b;--text-muted:#56606e;--accent:#0067c0;--accent-lite:rgba(0,103,192,.15)}
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;width:100%;font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);scroll-behavior:smooth;transition:background .3s,color .3s;line-height:1.7}
+header{position:sticky;top:0;z-index:20;background:rgba(0,0,0,.4);backdrop-filter:blur(10px)}
+nav{max-width:1100px;margin:0 auto;padding:1rem clamp(16px,4vw,32px);display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
+nav a.logo{font-weight:700;font-size:1.1rem;text-decoration:none;color:var(--text)}
+ul.nav-links{list-style:none;display:flex;gap:1.5rem;flex:1 1 auto;justify-content:center}
+ul.nav-links a{font-weight:600;color:var(--text);text-decoration:none;position:relative}
+ul.nav-links a:after{content:"";position:absolute;left:0;bottom:-3px;width:0;height:2px;background:var(--accent);transition:width var(--transition)}
+ul.nav-links a:hover:after,ul.nav-links a:focus:after{width:100%}
+.controls{display:flex;gap:.75rem}
+button,select{appearance:none;border:none;cursor:pointer;background:var(--surface);color:var(--text);padding:.45rem .9rem;border-radius:8px;font-weight:600;font-size:.85rem;transition:background var(--transition)}
+button:hover,select:hover{background:var(--accent-lite)}
+select{min-width:115px}
+main{max-width:1100px;margin:0 auto;padding:clamp(32px,6vw,72px) clamp(16px,4vw,32px)}
+.hero{display:grid;gap:2rem;align-items:center}
+@media(min-width:800px){.hero{grid-template-columns:1fr 1fr}}
+.hero h1{font-size:clamp(2.2rem,4vw+1rem,3.5rem);line-height:1.1;margin-bottom:1rem}
+.hero p{max-width:46ch;font-size:1.1rem;color:var(--text-muted)}
+.hero img{width:100%;border-radius:var(--radius);box-shadow:0 6px 32px rgba(0,0,0,.45);margin:clamp(24px,6vw,48px)}
+.cta-group{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem}
+a.cta-btn{background:var(--accent);color:#fff;font-weight:600;padding:.65rem 1.4rem;border-radius:8px;text-decoration:none;transition:background var(--transition)}
+a.cta-btn:hover,a.cta-btn:focus{background:var(--text);color:var(--bg)}
+section{margin-top:clamp(64px,12vw,120px)}
+section h2{font-size:1.9rem;margin-bottom:1.5rem}
+h2 .why{font-size:.9rem;font-weight:400;color:var(--text-muted);display:block;margin-top:.4rem}
+.cards{display:grid;gap:clamp(20px,4vw,36px)}
+@media(min-width:600px){.cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}}
+.card{background:var(--surface);border-radius:var(--radius);padding:1.75rem 1.6rem;box-shadow:0 4px 18px rgba(0,0,0,.35);transition:transform var(--transition),box-shadow var(--transition)}
+.card:hover,.card:focus-within{transform:translateY(-6px);box-shadow:0 8px 28px rgba(0,0,0,.45)}
+.card i{font-size:1.6rem;color:var(--accent);display:block;margin-bottom:.8rem}
+.card h3{font-size:1.25rem;margin-bottom:.5rem}
+.card p,.card ul{font-size:.95rem;color:var(--text-muted)}
+.card ul{list-style:disc;padding-left:1.2rem;display:grid;gap:.35rem}
+details{background:var(--surface);border-radius:var(--radius);padding:1.35rem 1.6rem;margin-bottom:1rem;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:background var(--transition)}
+details summary{list-style:none;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:.55rem}
+details summary::-webkit-details-marker{display:none}
+details summary i{transition:transform var(--transition)}
+details[open] summary i{transform:rotate(90deg)}
+details p,details ul{margin-top:1rem;color:var(--text-muted)}
+ul.clean{list-style:disc;padding-left:1.2rem;display:grid;gap:.35rem}
+li{line-height:1.7}
+.goal{font-style:italic;margin-top:.4rem;color:var(--text-muted)}
+.kbd,code{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;background:rgba(255,255,255,.07);padding:2px 6px;border-radius:4px;font-size:.9em}
+table.ref{width:100%;border-collapse:collapse;margin-top:1.2rem}
+table.ref th,table.ref td{border-bottom:1px solid rgba(255,255,255,.08);padding:.6rem;font-size:.95rem;text-align:left}
+footer{text-align:center;font-size:.85rem;opacity:.6;margin-top:96px;padding-bottom:48px}
+.reveal{opacity:0;transform:translateY(40px)}
+.visible{opacity:1;transform:none}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--surface);color:var(--text);padding:.75rem 1.2rem;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .3s var(--transition);z-index:30}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+<nav>
+<a class="logo" href="#">Windows 11 Mastery</a>
+<ul class="nav-links">
+<li><a href="#agenda">Roadmap</a></li>
+<li><a href="#shortcuts">Shortcuts</a></li>
+<li><a href="#gestures">Gestures</a></li>
+<li><a href="#explorer">Explorer</a></li>
+<li><a href="#onedrive">OneDrive</a></li>
+<li><a href="#reference">Quick-Ref</a></li>
+</ul>
+<div class="controls">
+<button id="themeBtn"><i class="lucide lucide-sun"></i></button>
+<button id="collapseBtn">Collapse All</button>
+</div>
+</nav>
+</header>
+<main>
+<section class="hero">
+<div>
+<h1 class="reveal">From Mac to PC:<br>Become a Windows Pro</h1>
+<p class="reveal" style="transition-delay:.08s">Follow this focused roadmap and level-up your workflow—cut clicks, save minutes, master Windows 11.</p>
+<div class="cta-group reveal" style="transition-delay:.1s">
+<a href="https://www.upwork.com/freelancers/~016021fb4f5ed4ff13?mp_source=share" target="_blank" rel="noopener noreferrer" class="cta-btn">Hire me on Upwork</a>
+<a href="https://buymeacoffee.com/garbledhamster" target="_blank" rel="noopener noreferrer" class="cta-btn">Buy Me a Coffee</a>
+</div>
+</div>
+<img class="reveal" style="transition-delay:.15s" src="https://images.unsplash.com/photo-1629191225144-09b803a07a3d?auto=format&fit=crop&w=1280&q=80" alt="Windows 11 desktop wallpaper">
+</section>
+<section id="agenda">
+<h2 class="reveal">Learning Roadmap <span class="why">Tackle one cluster, then advance.</span></h2>
+<div class="cards">
+<div class="card reveal"><i class="lucide lucide-search"></i><h3>Launch</h3><p>Start & Search that open apps in one keystroke.</p></div>
+<div class="card reveal" style="transition-delay:.05s"><i class="lucide lucide-layout"></i><h3>Navigate</h3><p>Snap Layouts & Task View to juggle desktops.</p></div>
+<div class="card reveal" style="transition-delay:.1s"><i class="lucide lucide-camera"></i><h3>Capture</h3><p>Snip & Sketch screenshots and recordings.</p></div>
+<div class="card reveal" style="transition-delay:.15s"><i class="lucide lucide-lock"></i><h3>Secure</h3><p>Windows Hello, lock, and quick VPN.</p></div>
+<div class="card reveal" style="transition-delay:.2s"><i class="lucide lucide-folders"></i><h3>Organize</h3><p>Explorer, Tags, and OneDrive hygiene.</p></div>
+</div>
+</section>
+<section id="shortcuts">
+<h2 class="reveal">Keyboard Shortcuts <span class="why">Save 1 000+ clicks daily.</span></h2>
+<details class="reveal" open>
+<summary><i class="lucide lucide-chevron-right"></i>Launch & Switch</summary>
+<ul class="clean">
+<li><strong><code>⊞</code></strong> → type “Edge” → <code>Enter</code>. <span class="goal">Goal: open any app &lt; 2 s.</span></li>
+<li><strong><code>⊞ S</code></strong> → Universal Search.</li>
+<li><strong><code>Alt Tab</code></strong> → cycle windows.</li>
+<li><strong><code>Alt `</code></strong> → cycle windows of current app.</li>
+<li><strong><code>⊞ L</code></strong> → lock screen instantly.</li>
+</ul>
+</details>
+<details class="reveal" open>
+<summary><i class="lucide lucide-chevron-right"></i>Window & Desktop Control</summary>
+<ul class="clean">
+<li><strong><code>⊞ Z</code></strong> → Snap Layouts menu.</li>
+<li><strong><code>⊞ ↕ (← →)</code></strong> → snap left/right.</li>
+<li><strong><code>⊞ Ctrl D</code></strong> → new desktop.</li>
+<li><strong><code>⊞ Ctrl ←/→</code></strong> → switch desktops.</li>
+<li><strong><code>⊞ Tab</code></strong> → Task View overview.</li>
+</ul>
+</details>
+<details class="reveal" open>
+<summary><i class="lucide lucide-zap"></i>Pro Moves</summary>
+<ul class="clean">
+<li><strong><code>⊞ Shift S</code></strong> → Snip & Sketch overlay.</li>
+<li><strong><code>⊞ V</code></strong> → Clipboard history.</li>
+<li><strong><code>⊞ Alt R</code></strong> → quick screen-record (Xbox Bar).</li>
+<li><strong><code>⊞ .</code></strong> → Emoji & Symbols.</li>
+<li><strong><code>Ctrl Shift Esc</code></strong> → Task Manager.</li>
+</ul>
+</details>
+</section>
+<section id="gestures">
+<h2 class="reveal">Touchpad Gestures <span class="why">Glide through Windows.</span></h2>
+<div class="cards">
+<div class="card reveal"><i class="lucide lucide-click-right"></i><h3>Tap</h3><p>Two-finger tap → right-click menu.</p></div>
+<div class="card reveal" style="transition-delay:.05s"><i class="lucide lucide-swipe-up"></i><h3>Swipe</h3><p>Three-finger swipe ↑ → Task View; ↓ → Desktop.</p></div>
+<div class="card reveal" style="transition-delay:.1s"><i class="lucide lucide-hand"></i><h3>Edge Pull</h3><p>Swipe from right edge → Notification Center.</p></div>
+<div class="card reveal" style="transition-delay:.15s"><i class="lucide lucide-touchpad-off"></i><h3>Spread & Pinch</h3><ul class="clean"><li>Pinch in → Taskbar Search.</li><li>Spread out → open Widgets.</li><li>Two-finger pinch / zoom → zoom in apps.</li></ul></div>
+<div class="card reveal" style="transition-delay:.2s"><i class="lucide lucide-copy"></i><h3>Advanced</h3><ul class="clean"><li>Four-finger tap → open Action Center (custom).</li><li>Assign three-finger tap to Play/Pause in Settings.</li></ul></div>
+</div>
+</section>
+<section id="explorer">
+<h2 class="reveal">Explorer Workflow <span class="why">Minutes now, hours saved later.</span></h2>
+<details class="reveal" open><summary><i class="lucide lucide-chevron-right"></i>Quick Access Tidy-up</summary><p>Explorer → Options → “Show frequently used folders” off.</p></details>
+<details class="reveal" open><summary><i class="lucide lucide-chevron-right"></i>Tags & Collections</summary><p>Right-click file → Properties → Add tags → search by tag.</p></details>
+<details class="reveal" open><summary><i class="lucide lucide-chevron-right"></i>Power Rename</summary><p>Select files → <code>Shift F10</code> → PowerToys Rename for patterns.</p></details>
+<details class="reveal" open><summary><i class="lucide lucide-eye"></i>Preview Pane</summary><p>Toggle <code>Alt P</code> to peek PDFs, media without opening.</p></details>
+<details class="reveal" open><summary><i class="lucide lucide-layout"></i>Tabs Mastery</summary><p><code>Ctrl T</code> new tab, <code>Ctrl Tab</code> cycle tabs, drag to new window.</p></details>
+</section>
+<section id="onedrive">
+<h2 class="reveal">OneDrive Moves <span class="why">Sync, protect, declutter.</span></h2>
+<details class="reveal" open><summary><i class="lucide lucide-chevron-right"></i>Storage Sense + Files on Demand</summary><ul class="clean"><li>Settings → System → Storage → enable Storage Sense.</li><li>OneDrive → Settings → “Files on Demand”.</li></ul></details>
+<details class="reveal" open><summary><i class="lucide lucide-chevron-right"></i>Known Folder Move</summary><p>OneDrive → Settings → Sync and Backup → Manage backup.</p></details>
+<details class="reveal" open><summary><i class="lucide lucide-users"></i>Shared Libraries</summary><p>Teams Site or SharePoint Library → “Add shortcut to OneDrive”.</p></details>
+<details class="reveal" open><summary><i class="lucide lucide-lock"></i>Personal Vault</summary><p>Enable 2FA-protected vault for sensitive docs.</p></details>
+<details class="reveal" open><summary><i class="lucide lucide-key"></i>Password Monitor</summary><p>Edge → Settings → Privacy → Password Monitor to leak-check creds.</p></details>
+</section>
+<section id="reference">
+<h2 class="reveal">Quick-Ref Table</h2>
+<table class="ref">
+<thead><tr><th>Shortcut</th><th>Action</th></tr></thead>
+<tbody>
+<tr><td><code>⊞</code></td><td>Open Start menu</td></tr>
+<tr><td><code>⊞ S</code></td><td>Search</td></tr>
+<tr><td><code>Alt Tab</code></td><td>Switch windows</td></tr>
+<tr><td><code>⊞ Z</code></td><td>Snap Layouts</td></tr>
+<tr><td><code>⊞ Shift S</code></td><td>Snip & Sketch</td></tr>
+<tr><td><code>⊞ Ctrl ←/→</code></td><td>Next/Prev desktop</td></tr>
+<tr><td><code>⊞ V</code></td><td>Clipboard history</td></tr>
+<tr><td><code>Ctrl Shift Esc</code></td><td>Task Manager</td></tr>
+<tr><td><code>⊞ I</code></td><td>Open Settings</td></tr>
+<tr><td><code>⊞ Alt R</code></td><td>Record screen</td></tr>
+<tr><td><code>⊞ .</code></td><td>Emoji picker</td></tr>
+<tr><td><code>⊞ L</code></td><td>Lock screen</td></tr>
+</tbody>
+</table>
+</section>
+</main>
+<footer>© 2025 Windows 11 Mastery · Built by Joe Rice · windows.tutorius.link</footer>
+<div class="toast" id="toast"></div>
+<script>
+const reveals=[...document.querySelectorAll('.reveal')];
+function show(e){e.classList.add('visible')}
+if('IntersectionObserver'in window){
+const io=new IntersectionObserver(a=>{a.forEach(e=>{if(e.isIntersecting){show(e.target);io.unobserve(e.target)}})},{threshold:.1});
+reveals.forEach(e=>io.observe(e))}else{reveals.forEach(show)}
+document.querySelectorAll('details').forEach(d=>d.open=true)
+const root=document.documentElement,themeBtn=document.getElementById('themeBtn');
+function setTheme(m){root.setAttribute('data-theme',m);themeBtn.innerHTML=m==='light'?'<i class="lucide lucide-moon"></i>':'<i class="lucide lucide-sun"></i>';localStorage.setItem('win-theme',m)}
+setTheme(localStorage.getItem('win-theme')||'dark');
+themeBtn.addEventListener('click',()=>setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
+const collapseBtn=document.getElementById('collapseBtn');let collapsed=false;
+collapseBtn.addEventListener('click',()=>{document.querySelectorAll('details').forEach(d=>d.open=collapsed);collapsed=!collapsed;collapseBtn.textContent=collapsed?'Expand All':'Collapse All'});
+const toast=document.getElementById('toast');
+function flash(msg){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),4000)}
+document.querySelectorAll('.cta-btn').forEach(b=>b.addEventListener('click',()=>flash('Opening in new tab — thanks for the support!')))
+toast.addEventListener('click',()=>toast.classList.remove('show'))
+</script>
+</body>
+</html>
