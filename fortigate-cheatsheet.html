@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FortiGate Cheat Sheet · Tutorius</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050208;--bg-alt:#140021;--accent:#7b2cff;--accent-lite:rgba(123,44,255,.18);--text:#f4f1ff;--text-muted:#bfb7ff;--radius:18px;--transition:.45s cubic-bezier(.4,.2,.2,1)}
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;scroll-behavior:smooth}
+body{display:flex;flex-direction:column}
+/* starfield */
+body::before{content:"";position:fixed;inset:0;background-image:radial-gradient(2px 2px at 20% 30%,#fff 0,transparent 50%),radial-gradient(2px 2px at 70% 40%,#fff 0,transparent 50%),radial-gradient(1.5px 1.5px at 40% 80%,#fff 0,transparent 50%),radial-gradient(1.5px 1.5px at 80% 70%,#fff 0,transparent 50%);background-repeat:repeat;background-size:400px 400px;opacity:.2;pointer-events:none;animation: drift 160s linear infinite}
+@keyframes drift{to{background-position:-4000px 2000px}}
+header{position:sticky;top:0;z-index:10;background:rgba(20,0,33,.85);backdrop-filter:blur(10px);box-shadow:0 2px 10px rgba(0,0,0,.3)}
+nav{max-width:1200px;margin:0 auto;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+nav .logo{font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--text)}
+.nav-right{display:flex;gap:1rem;align-items:center}
+.mode-toggle{border:none;background:var(--bg-alt);color:var(--text);padding:.55rem 1rem;font-weight:600;border-radius:8px;cursor:pointer;transition:background var(--transition)}
+.mode-toggle:hover{background:var(--accent-lite)}
+main{flex:1;padding:2rem 1.5rem 4rem}
+.container{max-width:1100px;margin:0 auto}
+.toc{background:var(--bg-alt);padding:1.5rem;border-radius:var(--radius);margin-bottom:2rem;border-left:3px solid var(--accent)}
+.toc h2{font-size:1.2rem;margin-bottom:1rem;color:var(--accent)}
+.toc ul{list-style:none;margin-left:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.5rem}
+.toc li{margin-bottom:.3rem}
+.toc a{color:var(--text-muted);text-decoration:none;font-size:.95rem;display:block;padding:.3rem .5rem;border-radius:6px;transition:all var(--transition)}
+.toc a:hover{background:var(--accent-lite);color:var(--accent);transform:translateX(4px)}
+.content{background:var(--bg-alt);padding:2.5rem;border-radius:var(--radius);box-shadow:0 4px 24px rgba(0,0,0,.45)}
+.content h1{font-size:2.5rem;margin-bottom:1.5rem;color:var(--accent);border-bottom:2px solid var(--accent-lite);padding-bottom:.75rem}
+.content h2{font-size:1.8rem;margin-top:3rem;margin-bottom:1.2rem;color:var(--text);scroll-margin-top:100px}
+.content h3{font-size:1.4rem;margin-top:2rem;margin-bottom:.8rem;color:var(--text-muted);scroll-margin-top:100px}
+.content h4{font-size:1.1rem;margin-top:1.5rem;margin-bottom:.6rem;color:var(--text-muted)}
+.content p{margin-bottom:1rem;line-height:1.8}
+.content ul,.content ol{margin-left:1.5rem;margin-bottom:1rem}
+.content li{margin-bottom:.5rem;line-height:1.7}
+.content code{background:var(--bg);color:#9d7bff;padding:.2rem .5rem;border-radius:4px;font-size:.9em;font-family:'Fira Code','Courier New',monospace}
+.content pre{background:#0a0514;padding:1.3rem;border-radius:8px;overflow-x:auto;margin:1.2rem 0;border-left:3px solid var(--accent);position:relative}
+.content pre code{background:none;padding:0;color:#e5d5ff;display:block;line-height:1.6}
+.content strong{color:var(--accent);font-weight:700}
+.content hr{border:none;border-top:1px solid var(--accent-lite);margin:2.5rem 0}
+.content em{color:var(--text-muted);font-style:italic}
+.note{background:rgba(123,44,255,.1);border-left:3px solid var(--accent);padding:1rem 1.2rem;margin:1.5rem 0;border-radius:6px}
+.note strong{display:block;margin-bottom:.5rem}
+footer{text-align:center;padding:2rem 1rem;font-size:.85rem;color:var(--text-muted)}
+@media(max-width:768px){
+nav{flex-direction:column;align-items:flex-start}
+.toc ul{grid-template-columns:1fr}
+.content{padding:1.5rem}
+.content h1{font-size:2rem}
+.content h2{font-size:1.5rem}
+}
+:root[data-theme='light']{--bg:#fff;--bg-alt:#fafafa;--text:#212121;--text-muted:#555;--accent:#5c2dff;--accent-lite:rgba(92,45,255,.18)}
+:root[data-theme='light'] .content pre{background:#f5f5f5}
+:root[data-theme='light'] .content pre code{color:#333}
+</style>
+</head>
+<body>
+<header>
+<nav>
+<a class="logo" href="index.html">Tutorius</a>
+<div class="nav-right">
+<button class="mode-toggle" id="modeBtn">☾</button>
+</div>
+</nav>
+</header>
+<main>
+<div class="container">
+<div class="toc">
+<h2>📑 Quick Navigation</h2>
+<ul>
+<li><a href="#concepts">Core Concepts</a></li>
+<li><a href="#navigation">CLI Navigation</a></li>
+<li><a href="#gui">GUI Overview</a></li>
+<li><a href="#interfaces">Interfaces & Routing</a></li>
+<li><a href="#static-routes">Static Routes</a></li>
+<li><a href="#hairpin">Hairpin Routing</a></li>
+<li><a href="#ospf">OSPF Routing</a></li>
+<li><a href="#bgp">BGP Routing</a></li>
+<li><a href="#policies">Firewall Policies</a></li>
+<li><a href="#nat">NAT & VIPs</a></li>
+<li><a href="#security">Security Profiles</a></li>
+<li><a href="#vpn">VPN Essentials</a></li>
+<li><a href="#monitoring">Monitoring & Debug</a></li>
+<li><a href="#logs">Logs & Reporting</a></li>
+<li><a href="#admin">Admin & RBAC</a></li>
+<li><a href="#ha">High Availability</a></li>
+<li><a href="#backup">Backup & Firmware</a></li>
+<li><a href="#gotchas">Common Gotchas</a></li>
+</ul>
+</div>
+
+<div class="content">
+<h1>🔥 FortiGate Cheat Sheet for System Admins</h1>
+<p><em>A comprehensive guide for navigating, configuring, and troubleshooting Fortinet FortiGate firewalls. Perfect for system administrators and FortiGate engineers.</em></p>
+
+<hr>
+
+<h2 id="concepts">1. Core Concepts & Modes</h2>
+
+<h3>Operational vs Configuration</h3>
+<ul>
+<li><strong>Operational (run-time) commands</strong> – monitoring, troubleshooting</li>
+<li>Example: <code>get system performance status</code>, <code>diagnose debug application httpsd -1</code></li>
+<li><strong>Configuration commands</strong> – change device config</li>
+<li>Example: <code>config firewall policy</code></li>
+</ul>
+
+<h3>VDOMs (Virtual Domains)</h3>
+<ul>
+<li><strong>Single VDOM:</strong> smaller deployments</li>
+<li><strong>Multi-VDOM:</strong> MSSP / multi-tenant / large enterprise</li>
+<li>Enter VDOM: <code>config vdom</code> → <code>edit &lt;vdom_name&gt;</code></li>
+</ul>
+
+<p>Check VDOM mode:</p>
+<pre><code>get system status | grep -i vdom</code></pre>
+
+<hr>
+
+<h2 id="navigation">2. Logging In & Basic Navigation</h2>
+
+<h3>CLI Access Methods</h3>
+<ul>
+<li><strong>Console:</strong> direct serial / USB</li>
+<li><strong>SSH:</strong> <code>ssh admin@&lt;ip&gt;</code></li>
+<li><strong>HTTPS GUI:</strong> <code>https://&lt;ip&gt;:443</code></li>
+</ul>
+
+<h3>CLI Modes</h3>
+<p>Global config:</p>
+<pre><code>config global</code></pre>
+
+<p>Within a VDOM:</p>
+<pre><code>config vdom
+edit root   # or other VDOM name</code></pre>
+
+<p>Command help:</p>
+<pre><code>?           # list commands at current level
+show ?      # show options</code></pre>
+
+<p><strong>Tip:</strong> Auto-complete with <code>Tab</code> or <code>?</code> after part of a command.</p>
+
+<hr>
+
+<h2 id="gui">3. High-Level GUI Map</h2>
+<p><em>(Labels can move slightly between FortiOS versions, but structure is similar.)</em></p>
+
+<ul>
+<li><strong>Dashboard</strong> – System info, interfaces, resource usage, widgets</li>
+<li><strong>Network</strong> – Interfaces, static routes, SD-WAN, DNS, DHCP, Policy Routes, Routing Monitor</li>
+<li><strong>System</strong> – Administrators, Settings, HA, SNMP, NTP, Certificates, Firmware, Config</li>
+<li><strong>Policy & Objects</strong> – Firewall policies, Addresses, Services, Schedules, Virtual IPs (DNAT), IP Pools (SNAT), Internet Service DB</li>
+<li><strong>Security Profiles</strong> – AV, Web Filter, Application Control, IPS, SSL Inspection, DNS Filter, Email Filter</li>
+<li><strong>VPN</strong> – IPsec, SSL-VPN, interfaces, portals, users/groups</li>
+<li><strong>Log & Report</strong> – Local logs, FortiAnalyzer/Cloud, traffic logs, event logs</li>
+<li><strong>User & Authentication</strong> – Users & User Groups, FSSO, RADIUS/LDAP, 2FA</li>
+<li><strong>WiFi & Switch Controller</strong> – FortiAPs, managed switches, SSIDs, VLANs (if supported model)</li>
+</ul>
+
+<hr>
+
+<h2 id="interfaces">4. Interface & Routing Basics</h2>
+
+<h3>Show Interfaces (CLI)</h3>
+<pre><code>get system interface                         # summary
+show system interface                        # config with comments
+show system interface &lt;name&gt;                 # single interface config</code></pre>
+
+<p>Typical interface config:</p>
+<pre><code>config system interface
+    edit "port1"
+        set mode static
+        set ip 192.168.1.1 255.255.255.0
+        set allowaccess ping https ssh http fgfm
+    next
+end</code></pre>
+
+<h3>Show Routes</h3>
+<pre><code>get router info routing-table all
+get router info routing-table details
+get router info routing-table details 8.8.8.8    # lookup specific destination</code></pre>
+
+<h3>DNS / NTP / Hostname</h3>
+<pre><code>config system global
+    set hostname "FGT-Branch01"
+    set timezone 04          # example
+end
+
+config system dns
+    set primary 1.1.1.1
+    set secondary 8.8.8.8
+end
+
+config system ntp
+    set ntpsync enable
+    set server-mode disable
+    config ntpserver
+        edit 1
+            set server "pool.ntp.org"
+        next
+    end
+end</code></pre>
+
+<hr>
+
+<h2 id="static-routes">5. Static Routes</h2>
+
+<h3>Basic Default Route</h3>
+<pre><code>config router static
+    edit 0
+        set dst 0.0.0.0 0.0.0.0
+        set gateway 203.0.113.1
+        set device "wan1"
+        set distance 10
+    next
+end</code></pre>
+
+<h3>Static Route to Internal Network</h3>
+<pre><code>config router static
+    edit 0
+        set dst 10.10.0.0 255.255.255.0
+        set device "lan"
+    next
+end</code></pre>
+<p><em>No <code>gateway</code> needed when the network is directly connected on that interface.</em></p>
+
+<h3>Static Route to a Remote Network Behind Next Hop</h3>
+<pre><code>config router static
+    edit 0
+        set dst 172.16.20.0 255.255.255.0
+        set gateway 10.0.0.2
+        set device "lan"
+        set distance 10
+    next
+end</code></pre>
+
+<hr>
+
+<h2 id="hairpin">6. Hairpin / U-Turn Routing</h2>
+<p>On FortiGate, hairpin/NAT reflection is usually handled with <strong>VIP + policy</strong>, not just routing.</p>
+
+<h3>Scenario</h3>
+<ul>
+<li>Internal clients: <code>10.0.0.0/24</code> on <code>port1 (lan)</code></li>
+<li>Internal web server: <code>10.0.0.10</code></li>
+<li>Public IP/VIP: <code>203.0.113.10</code> on <code>wan1</code></li>
+<li>Clients use the <strong>public</strong> FQDN/IP even from inside (hairpin).</li>
+</ul>
+
+<h3>VIP (DNAT) – Same as normal inbound</h3>
+<pre><code>config firewall vip
+    edit "web-vip"
+        set extip 203.0.113.10
+        set mappedip "10.0.0.10"
+        set extintf "wan1"
+        set portforward enable
+        set extport 443
+        set mappedport 443
+    next
+end</code></pre>
+
+<h3>Hairpin Policy – LAN to WAN VIP</h3>
+<pre><code>config firewall policy
+    edit 0
+        set name "LAN-to-Web-Hairpin"
+        set srcintf "lan"
+        set dstintf "wan1"
+        set srcaddr "all"
+        set dstaddr "web-vip"
+        set action accept
+        set schedule "always"
+        set service "HTTPS"
+        set nat enable
+    next
+end</code></pre>
+
+<div class="note">
+<strong>Note:</strong> No extra static route is usually needed; traffic enters on <code>lan</code>, is DNAT'd to <code>10.0.0.10</code>, and hairpins back internally.
+</div>
+
+<h3>Hairpin with Policy Route (Optional Advanced Style)</h3>
+<p>You can use a <strong>policy route</strong> to steer traffic destined for the public IP back to an internal interface.</p>
+
+<pre><code>config router policy
+    edit 1
+        set input-device "lan"
+        set src 10.0.0.0 255.255.255.0
+        set dst 203.0.113.10 255.255.255.255
+        set output-device "lan"
+        set gateway 10.0.0.10
+    next
+end</code></pre>
+
+<hr>
+
+<h2 id="ospf">7. OSPF Routing</h2>
+
+<h3>Enable OSPF Process (Global)</h3>
+<pre><code>config router ospf
+    set router-id 1.1.1.1
+end</code></pre>
+
+<h3>Advertise Connected Networks via OSPF</h3>
+<p><strong>Option A – Interface-based:</strong></p>
+<pre><code>config router ospf
+    config ospf-interface
+        edit "lan-ospf"
+            set interface "lan"
+            set network-type broadcast
+        next
+        edit "wan1-ospf"
+            set interface "wan1"
+            set network-type broadcast
+        next
+    end
+end</code></pre>
+
+<p><strong>Option B – Network statements:</strong></p>
+<pre><code>config router ospf
+    config area
+        edit 0.0.0.0
+        next
+    end
+    config network
+        edit 1
+            set prefix 10.0.0.0 255.255.255.0
+            set area 0.0.0.0
+        next
+        edit 2
+            set prefix 192.0.2.0 255.255.255.0
+            set area 0.0.0.0
+        next
+    end
+end</code></pre>
+
+<h3>Check OSPF Status</h3>
+<pre><code>get router info ospf status
+get router info ospf neighbor
+get router info ospf route</code></pre>
+
+<hr>
+
+<h2 id="bgp">8. BGP Routing</h2>
+
+<h3>Basic BGP Setup</h3>
+<p><strong>Scenario:</strong></p>
+<ul>
+<li>Local ASN: <code>65001</code></li>
+<li>Peer ASN: <code>65002</code></li>
+<li>Local IP on <code>wan1</code>: <code>203.0.113.2</code></li>
+<li>Peer IP: <code>203.0.113.1</code></li>
+<li>We want to announce <code>10.0.0.0/24</code>.</li>
+</ul>
+
+<pre><code>config router bgp
+    set as 65001
+    set router-id 203.0.113.2
+
+    config neighbor
+        edit "203.0.113.1"
+            set remote-as 65002
+            set update-source "wan1"
+        next
+    end
+
+    config network
+        edit 1
+            set prefix 10.0.0.0 255.255.255.0
+        next
+    end
+end</code></pre>
+
+<h3>Route Maps / Filtering (Simple Example)</h3>
+<pre><code>config router route-map
+    edit "OUT-TO-PEER"
+        config rule
+            edit 1
+                set match-ip-address "LOCAL-NETS"
+                set set-metric 10
+            next
+        end
+    next
+end
+
+config router prefix-list
+    edit "LOCAL-NETS"
+        config rule
+            edit 1
+                set prefix 10.0.0.0 255.255.255.0
+                set ge 24
+                set le 24
+            next
+        end
+    next
+end
+
+config router bgp
+    config neighbor
+        edit "203.0.113.1"
+            set remote-as 65002
+            set route-map-out "OUT-TO-PEER"
+        next
+    end
+end</code></pre>
+
+<h3>Check BGP Status</h3>
+<pre><code>get router info bgp summary
+get router info bgp neighbors
+get router info bgp network
+get router info routing-table bgp</code></pre>
+
+<hr>
+
+<h2 id="policies">9. Firewall Policies & NAT</h2>
+
+<h3>Listing Policies</h3>
+<p><strong>GUI:</strong> <strong>Policy & Objects → Firewall Policy</strong></p>
+<p><strong>CLI:</strong></p>
+<pre><code>show firewall policy
+get firewall policy
+get firewall policy | grep -f &lt;pattern&gt;</code></pre>
+
+<h3>Creating a Basic Policy (CLI)</h3>
+<pre><code>config firewall policy
+    edit 0
+        set name "LAN-to-WAN"
+        set srcintf "lan"
+        set dstintf "wan1"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set nat enable
+        set logtraffic all
+    next
+end</code></pre>
+
+<p><strong>Key flags:</strong></p>
+<ul>
+<li><code>set nat enable</code> – source NAT (typically to WAN IP / IP pool)</li>
+<li><code>set logtraffic all</code> or <code>utm</code> – enable logging</li>
+</ul>
+
+<hr>
+
+<h2 id="nat">10. VIP (DNAT) & NAT</h2>
+
+<h3>VIP for DNAT</h3>
+<p>Example: map external <code>203.0.113.10:443</code> to internal <code>10.0.0.10:443</code></p>
+
+<pre><code>config firewall vip
+    edit "web-vip"
+        set extip 203.0.113.10
+        set mappedip "10.0.0.10"
+        set extintf "wan1"
+        set portforward enable
+        set extport 443
+        set mappedport 443
+    next
+end
+
+config firewall policy
+    edit 0
+        set name "WAN-to-Web"
+        set srcintf "wan1"
+        set dstintf "lan"
+        set srcaddr "all"
+        set dstaddr "web-vip"
+        set action accept
+        set schedule "always"
+        set service "HTTPS"
+        set nat disable
+    next
+end</code></pre>
+
+<hr>
+
+<h2 id="security">11. Security Profiles (UTM)</h2>
+<p>Typical profile attach points: Firewall Policy <code>set av-profile</code>, <code>set webfilter-profile</code>, etc.</p>
+
+<h3>Attach Profiles to Policy (CLI)</h3>
+<pre><code>config firewall policy
+    edit 10
+        set name "LAN-to-Internet Secure"
+        set srcintf "lan"
+        set dstintf "wan1"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set utm-status enable
+        set inspection-mode proxy
+        set av-profile "default"
+        set webfilter-profile "default"
+        set application-list "default"
+        set ssl-ssh-profile "certificate-inspection"
+        set logtraffic all
+    next
+end</code></pre>
+
+<div class="note">
+<strong>Note:</strong> Actual profile names vary by device/config.
+</div>
+
+<hr>
+
+<h2 id="vpn">12. VPN Essentials</h2>
+
+<h3>IPsec Site-to-Site – Quick CLI Skeleton</h3>
+
+<h4>Phase1:</h4>
+<pre><code>config vpn ipsec phase1-interface
+    edit "HQ-Branch"
+        set interface "wan1"
+        set peertype any
+        set remote-gw 198.51.100.10
+        set psksecret "StrongSharedKey123"
+        set proposal aes256-sha256
+        set dhgrp 14
+    next
+end</code></pre>
+
+<h4>Phase2:</h4>
+<pre><code>config vpn ipsec phase2-interface
+    edit "HQ-Branch-p2"
+        set phase1name "HQ-Branch"
+        set src-subnet 10.0.0.0 255.255.255.0
+        set dst-subnet 10.10.0.0 255.255.255.0
+        set proposal aes256-sha256
+    next
+end</code></pre>
+
+<h4>Policy:</h4>
+<pre><code>config firewall policy
+    edit 0
+        set name "LAN-to-Branch"
+        set srcintf "lan"
+        set dstintf "HQ-Branch"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+    next
+end</code></pre>
+
+<h4>Route (if needed):</h4>
+<pre><code>config router static
+    edit 0
+        set dst 10.10.0.0 255.255.255.0
+        set device "HQ-Branch"
+    next
+end</code></pre>
+
+<h3>SSL-VPN Key Bits</h3>
+<ul>
+<li><strong>Portal:</strong> what users see (web/rdp bookmarks, tunnel mode)</li>
+<li><strong>Realm / Listening interface</strong></li>
+<li><strong>User groups</strong> assigned to portals/policies</li>
+</ul>
+
+<p>Check SSL-VPN sessions:</p>
+<pre><code>diagnose vpn ssl vpn-list</code></pre>
+
+<hr>
+
+<h2 id="monitoring">13. Monitoring & Troubleshooting</h2>
+
+<h3>System Health</h3>
+<pre><code>get system performance status
+get system status
+diagnose hardware deviceinfo nic &lt;port&gt;
+diagnose sys top-summary
+diagnose sys top         # 'q' to quit</code></pre>
+
+<h3>Check Interfaces / Links</h3>
+<pre><code>get system interface
+diagnose netlink interface list
+execute ping 8.8.8.8
+execute traceroute 8.8.8.8</code></pre>
+
+<h3>Policy Lookup (Which rule is hit?)</h3>
+<pre><code>diagnose firewall iprope lookup addr &lt;src-ip&gt; &lt;dst-ip&gt; &lt;port&gt; &lt;proto&gt;
+# proto: 6 = TCP, 17 = UDP, etc.</code></pre>
+
+<p>Example:</p>
+<pre><code>diagnose firewall iprope lookup addr 10.0.0.10 8.8.8.8 53 17</code></pre>
+
+<h3>Session Table</h3>
+<pre><code>diagnose sys session list
+diagnose sys session list | grep -f &lt;ip&gt;
+diagnose sys session filter src 10.0.0.10
+diagnose sys session filter dst 8.8.8.8
+diagnose sys session filter clear
+diagnose sys session list</code></pre>
+
+<h3>Debug Flow (Core for Traffic Troubleshooting)</h3>
+<p><strong>1. Clear / prepare:</strong></p>
+<pre><code>diagnose debug reset
+diagnose debug disable
+diagnose debug flow filter clear
+diagnose debug flow filter addr 10.0.0.10        # or src/dst-port etc.
+diagnose debug flow show function-name enable
+diagnose debug flow show iprope enable
+diagnose debug enable
+diagnose debug flow trace start 100</code></pre>
+
+<p><strong>2. Generate test traffic from the client.</strong></p>
+
+<p><strong>3. Stop debug:</strong></p>
+<pre><code>diagnose debug disable
+diagnose debug reset</code></pre>
+
+<p>Look for:</p>
+<ul>
+<li>Policy IDs hit</li>
+<li>NAT translation</li>
+<li>Drop reasons (e.g., <code>iprope_in_check()</code>, <code>Denied by forward policy</code>, <code>reverse path check fail</code>)</li>
+</ul>
+
+<hr>
+
+<h2 id="logs">14. Logs</h2>
+
+<h3>Configure Remote Logging (Syslog / FortiAnalyzer / Cloud)</h3>
+<p>Example – Syslog:</p>
+<pre><code>config log syslogd setting
+    set status enable
+    set server "192.0.2.10"
+    set port 514
+    set facility local7
+    set format default
+end</code></pre>
+
+<p>Enable logging in policies (<code>set logtraffic all</code>).</p>
+
+<h3>Viewing Logs (GUI)</h3>
+<ul>
+<li><strong>Log & Report → Forward Traffic</strong></li>
+<li><strong>Log & Report → Event</strong>, VPN, Security, etc.</li>
+<li>Use filters: src/dst IP, interface, policy ID, action.</li>
+</ul>
+
+<hr>
+
+<h2 id="admin">15. Admin & RBAC</h2>
+
+<h3>Local Admin Accounts</h3>
+<pre><code>config system admin
+    edit "netops"
+        set password &lt;secure_password&gt;
+        set accprofile "read-only"   # or "prof_admin", "super_admin", or custom
+        set vdom "root"
+        set trusthost1 10.0.0.0 255.255.255.0  # optional
+    next
+end</code></pre>
+
+<h3>Change Admin HTTPS / SSH Ports</h3>
+<pre><code>config system global
+    set admin-port 8443
+    set admin-sport 2222
+end</code></pre>
+<p><strong>Remember</strong> to update firewall rules and management docs.</p>
+
+<hr>
+
+<h2 id="ha">16. HA Clustering (Short Overview)</h2>
+<ul>
+<li><strong>Modes:</strong> Active-Passive, Active-Active (less common now)</li>
+<li><strong>Key Settings:</strong> <code>group-name</code>, <code>group-id</code>, <code>hbdev</code> (heartbeat interfaces), <code>priority</code>, <code>override</code> (enable/disable)</li>
+</ul>
+
+<p>Skeleton:</p>
+<pre><code>config system ha
+    set mode a-p
+    set group-name "FGT-HA"
+    set group-id 1
+    set hbdev "port3" 50 "port4" 50
+    set priority 200
+    set override enable
+end</code></pre>
+
+<p>Check HA status:</p>
+<pre><code>get system ha status
+diagnose sys ha status</code></pre>
+
+<hr>
+
+<h2 id="backup">17. Backup, Restore & Firmware</h2>
+
+<h3>Backup Config</h3>
+<ul>
+<li><strong>GUI:</strong> <strong>System → Configuration → Backup</strong></li>
+<li><strong>CLI:</strong></li>
+</ul>
+<pre><code>execute backup config tftp fgt-config-20260117.conf 192.0.2.10
+execute backup config usb fgt-config-20260117.conf</code></pre>
+
+<h3>Restore Config</h3>
+<pre><code>execute restore config tftp fgt-config-20260117.conf 192.0.2.10</code></pre>
+
+<h3>Upgrade Firmware (CLI – simplified)</h3>
+<pre><code>execute backup config flash backup-before-upgrade.conf
+execute restore image tftp &lt;firmware-file.out&gt; 192.0.2.10</code></pre>
+
+<p>Follow Fortinet's official upgrade path per FortiOS Release Notes.</p>
+
+<hr>
+
+<h2 id="gotchas">18. Common "Gotchas" Checklist</h2>
+
+<h3>No internet:</h3>
+<ul>
+<li>Check interface link (<code>get system interface</code>, LEDs)</li>
+<li>Default route present? (<code>get router info routing-table all</code>)</li>
+<li>Policy LAN→WAN exists, action <code>accept</code>, <code>nat enable</code>?</li>
+<li>DNS reachable?</li>
+</ul>
+
+<h3>Service not reachable from internet:</h3>
+<ul>
+<li>VIP defined correctly (ext/dst IPs, ports, interface)?</li>
+<li>Matching WAN→LAN policy with VIP as destination?</li>
+<li>Upstream router/ISP pointing traffic to FortiGate?</li>
+<li>Server's local firewall (Windows firewall, etc.)?</li>
+</ul>
+
+<h3>VPN:</h3>
+<ul>
+<li>Phase1 and Phase2 up? (<code>diagnose vpn tunnel list</code>)</li>
+<li>Quick mode selectors (phase2 src/dst subnets) match on both sides?</li>
+<li>Routes present for remote networks?</li>
+<li>Policies for traffic over VPN interfaces?</li>
+</ul>
+
+<hr>
+
+<h2>19. Quick "Which Route Is Used?" Commands</h2>
+<ul>
+<li><strong>Full routing table:</strong> <code>get router info routing-table all</code></li>
+<li><strong>Static routes only:</strong> <code>get router info routing-table static</code></li>
+<li><strong>BGP routes:</strong> <code>get router info routing-table bgp</code></li>
+<li><strong>OSPF routes:</strong> <code>get router info routing-table ospf</code></li>
+<li><strong>Lookup for a specific destination:</strong> <code>get router info routing-table details 8.8.8.8</code></li>
+</ul>
+
+<hr>
+
+<div class="note">
+<strong>🎓 Pro Tip:</strong> Bookmark this page and keep it handy during FortiGate deployments, troubleshooting sessions, and when studying for Fortinet certifications (NSE4+).
+</div>
+
+</div>
+</div>
+</main>
+<footer>
+Made with ✦ by Joe Rice · © 2025 Tutorius
+</footer>
+<script>
+// Theme management
+const modeBtn=document.getElementById('modeBtn');
+const html=document.documentElement;
+modeBtn.addEventListener('click',()=>{
+const newTheme=html.getAttribute('data-theme')==='dark'?'light':'dark';
+html.setAttribute('data-theme',newTheme);
+modeBtn.textContent=newTheme==='dark'?'☾':'☀︎';
+localStorage.setItem('tutorius-theme',newTheme);
+});
+html.setAttribute('data-theme',localStorage.getItem('tutorius-theme')||'dark');
+modeBtn.textContent=html.getAttribute('data-theme')==='dark'?'☾':'☀︎';
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+anchor.addEventListener('click',function(e){
+e.preventDefault();
+const target=document.querySelector(this.getAttribute('href'));
+if(target){
+target.scrollIntoView({behavior:'smooth',block:'start'});
+}
+});
+});
+</script>
+</body>
+</html>
