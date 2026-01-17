@@ -74,7 +74,6 @@ nav{flex-direction:column;align-items:flex-start}
 <footer>
 Made with ✦ by Joe Rice · © 2025 Tutorius
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
 <script>
 // Theme management
 const modeBtn=document.getElementById('modeBtn');
@@ -98,11 +97,102 @@ const sheetButtons=document.querySelectorAll('.sheet-btn');
 const urlParams=new URLSearchParams(window.location.search);
 let currentSheet=urlParams.get('sheet')||'Windows_11';
 
-// Configure marked options
-marked.setOptions({
-breaks: true,
-gfm: true
+// Simple markdown parser
+function parseMarkdown(md){
+// Escape HTML
+md=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+// Code blocks first (so they don't get processed)
+let codeBlocks=[];
+md=md.replace(/```(\w*)\n([\s\S]*?)```/g,(match,lang,code)=>{
+const placeholder=`__CODEBLOCK_${codeBlocks.length}__`;
+codeBlocks.push(`<pre><code>${code.trim()}</code></pre>`);
+return placeholder;
 });
+// Inline code
+md=md.replace(/`([^`]+)`/g,'<code>$1</code>');
+// Headers
+md=md.replace(/^### (.*)$/gm,'<h3>$1</h3>');
+md=md.replace(/^## (.*)$/gm,'<h2>$1</h2>');
+md=md.replace(/^# (.*)$/gm,'<h1>$1</h1>');
+// Bold
+md=md.replace(/\*\*([^\*]+)\*\*/g,'<strong>$1</strong>');
+// Links
+md=md.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');
+// Horizontal rule
+md=md.replace(/^---$/gm,'<hr>');
+// Process lists and paragraphs
+let lines=md.split('\n');
+let result=[];
+let inList=false;
+let listType='';
+for(let i=0;i<lines.length;i++){
+const line=lines[i].trim();
+if(!line){
+if(inList){result.push(listType==='ul'?'</ul>':'</ol>');inList=false;}
+result.push('');
+continue;
+}
+// Unordered list
+if(line.match(/^[-*]\s/)){
+if(!inList||listType!=='ul'){
+if(inList)result.push(listType==='ul'?'</ul>':'</ol>');
+result.push('<ul>');
+inList=true;
+listType='ul';
+}
+result.push('<li>'+line.replace(/^[-*]\s/,'')+'</li>');
+}
+// Ordered list
+else if(line.match(/^\d+\.\s/)){
+if(!inList||listType!=='ol'){
+if(inList)result.push(listType==='ul'?'</ul>':'</ol>');
+result.push('<ol>');
+inList=true;
+listType='ol';
+}
+result.push('<li>'+line.replace(/^\d+\.\s/,'')+'</li>');
+}
+// Regular line
+else{
+if(inList){result.push(listType==='ul'?'</ul>':'</ol>');inList=false;}
+if(line.match(/^<h[1-3]>|^<hr>/)){
+result.push(line);
+}else{
+result.push(line);
+}
+}
+}
+if(inList)result.push(listType==='ul'?'</ul>':'</ol>');
+// Join and wrap non-header, non-list content in paragraphs
+let html=result.join('\n');
+html=html.replace(/\n{2,}/g,'\n\n');
+let finalLines=html.split('\n');
+let finalResult=[];
+let paragraph=[];
+for(let line of finalLines){
+if(!line.trim()){
+if(paragraph.length){
+finalResult.push('<p>'+paragraph.join(' ')+'</p>');
+paragraph=[];
+}
+}else if(line.match(/^<[huplor]/)){
+if(paragraph.length){
+finalResult.push('<p>'+paragraph.join(' ')+'</p>');
+paragraph=[];
+}
+finalResult.push(line);
+}else{
+paragraph.push(line);
+}
+}
+if(paragraph.length)finalResult.push('<p>'+paragraph.join(' ')+'</p>');
+html=finalResult.join('');
+// Restore code blocks
+codeBlocks.forEach((block,i)=>{
+html=html.replace(`__CODEBLOCK_${i}__`,block);
+});
+return html;
+}
 
 async function loadSheet(sheetName){
 loadingDiv.style.display='block';
@@ -127,7 +217,7 @@ if(!response.ok){
 throw new Error(`Failed to load ${sheetName}.md`);
 }
 const markdown=await response.text();
-const html=marked.parse(markdown);
+const html=parseMarkdown(markdown);
 contentDiv.innerHTML=html;
 contentDiv.style.display='block';
 loadingDiv.style.display='none';
