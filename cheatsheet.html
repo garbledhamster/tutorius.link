@@ -175,7 +175,7 @@ if(paragraph.length){
 finalResult.push('<p>'+paragraph.join(' ')+'</p>');
 paragraph=[];
 }
-}else if(line.match(/^<[huplor]/)){
+}else if(line.match(/^<(h[1-3]|ul|ol|li|p|hr)>/)){  // Match HTML tags: headers, lists, paragraphs, horizontal rules
 if(paragraph.length){
 finalResult.push('<p>'+paragraph.join(' ')+'</p>');
 paragraph=[];
@@ -217,7 +217,7 @@ if(!response.ok){
 throw new Error(`Failed to load ${sheetName}.md`);
 }
 const markdown=await response.text();
-const html=parseMarkdown(markdown);
+const html=parseMarkdown(markdown);  // Note: parseMarkdown() escapes HTML entities to prevent XSS
 contentDiv.innerHTML=html;
 contentDiv.style.display='block';
 loadingDiv.style.display='none';
