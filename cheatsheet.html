@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Cheat Sheet · Tutorius</title>
+<title>Tuts · Tutorius</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#050208;--bg-alt:#140021;--accent:#7b2cff;--accent-lite:rgba(123,44,255,.18);--text:#f4f1ff;--text-muted:#bfb7ff;--radius:18px;--transition:.45s cubic-bezier(.4,.2,.2,1)}
@@ -13,15 +13,30 @@ body{display:flex;flex-direction:column}
 /* starfield */
 body::before{content:"";position:fixed;inset:0;background-image:radial-gradient(2px 2px at 20% 30%,#fff 0,transparent 50%),radial-gradient(2px 2px at 70% 40%,#fff 0,transparent 50%),radial-gradient(1.5px 1.5px at 40% 80%,#fff 0,transparent 50%),radial-gradient(1.5px 1.5px at 80% 70%,#fff 0,transparent 50%);background-repeat:repeat;background-size:400px 400px;opacity:.2;pointer-events:none;animation: drift 160s linear infinite}
 @keyframes drift{to{background-position:-4000px 2000px}}
-header{position:sticky;top:0;z-index:10;background:rgba(20,0,33,.85);backdrop-filter:blur(10px);box-shadow:0 2px 10px rgba(0,0,0,.3)}
-nav{max-width:1200px;margin:0 auto;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+header{position:sticky;top:0;z-index:50;background:rgba(20,0,33,.85);backdrop-filter:blur(10px);box-shadow:0 2px 10px rgba(0,0,0,.3)}
+nav{max-width:1200px;margin:0 auto;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 nav .logo{font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--text)}
-.sheet-buttons{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
-.sheet-btn{background:var(--accent);color:#fff;font-weight:600;padding:.65rem 1.3rem;border-radius:10px;text-decoration:none;font-size:.9rem;transition:transform var(--transition),box-shadow var(--transition);border:none;cursor:pointer;font-family:inherit}
-.sheet-btn:hover,.sheet-btn:focus{transform:translateY(-2px);box-shadow:0 4px 16px rgba(123,44,255,.5)}
-.sheet-btn.active{background:var(--accent-lite);color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+nav ul{display:flex;gap:2rem;list-style:none;align-items:center}
+nav a{color:var(--text);text-decoration:none;position:relative;font-weight:600;font-size:.95rem;transition:color var(--transition)}
+nav a:hover{color:var(--accent)}
+.nav-right{display:flex;gap:1rem;align-items:center}
 .mode-toggle{border:none;background:var(--bg-alt);color:var(--text);padding:.55rem 1rem;font-weight:600;border-radius:8px;cursor:pointer;transition:background var(--transition)}
 .mode-toggle:hover{background:var(--accent-lite)}
+.drawer-toggle{border:none;background:var(--accent);color:#fff;padding:.65rem 1.3rem;font-weight:600;border-radius:8px;cursor:pointer;transition:transform var(--transition),box-shadow var(--transition);font-family:inherit;font-size:.9rem}
+.drawer-toggle:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(123,44,255,.5)}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);opacity:0;visibility:hidden;transition:opacity var(--transition),visibility var(--transition);z-index:200}
+.drawer-overlay.active{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(90vw,400px);background:var(--bg-alt);box-shadow:-4px 0 24px rgba(0,0,0,.5);transform:translateX(100%);transition:transform var(--transition);z-index:300;display:flex;flex-direction:column}
+.drawer.active{transform:translateX(0)}
+.drawer-header{padding:1.5rem 2rem;border-bottom:2px solid var(--accent-lite);display:flex;justify-content:space-between;align-items:center}
+.drawer-header h2{font-size:1.4rem;color:var(--accent)}
+.drawer-close{background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer;padding:.5rem;transition:color var(--transition)}
+.drawer-close:hover{color:var(--accent)}
+.drawer-content{flex:1;overflow-y:auto;padding:1.5rem 2rem}
+.drawer-menu{display:flex;flex-direction:column;gap:1rem}
+.drawer-item{background:var(--bg);padding:1rem 1.5rem;border-radius:10px;border:2px solid transparent;cursor:pointer;transition:all var(--transition);font-weight:600;color:var(--text);text-align:left;font-family:inherit;font-size:.95rem}
+.drawer-item:hover{border-color:var(--accent);transform:translateX(-4px)}
+.drawer-item.active{background:var(--accent-lite);border-color:var(--accent);color:var(--accent)}
 main{flex:1;padding:2rem 1.5rem 4rem}
 .container{max-width:900px;margin:0 auto}
 .loading{text-align:center;padding:4rem 2rem;color:var(--text-muted);font-size:1.1rem}
@@ -43,8 +58,9 @@ main{flex:1;padding:2rem 1.5rem 4rem}
 #content a:hover{border-bottom-color:var(--accent)}
 footer{text-align:center;padding:2rem 1rem;font-size:.85rem;color:var(--text-muted)}
 @media(max-width:768px){
-nav{flex-direction:column;align-items:flex-start}
-.sheet-buttons{width:100%}
+nav ul{gap:1rem}
+nav a{font-size:.85rem}
+.drawer{width:100%}
 #content{padding:1.5rem}
 #content h1{font-size:1.8rem}
 }
@@ -57,16 +73,31 @@ nav{flex-direction:column;align-items:flex-start}
 <header>
 <nav>
 <a class="logo" href="index.html">Tutorius</a>
-<div class="sheet-buttons">
-<button class="sheet-btn" data-sheet="Windows_11">Windows 11</button>
-<button class="sheet-btn" data-sheet="MacOS_26">macOS</button>
-</div>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="#" id="tutsMenuBtn" aria-expanded="false" aria-controls="drawer" aria-haspopup="dialog">Tuts</a></li>
+</ul>
+<div class="nav-right">
 <button class="mode-toggle" id="modeBtn">☾</button>
+</div>
 </nav>
 </header>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer" role="dialog" aria-labelledby="drawerTitle" aria-modal="true">
+<div class="drawer-header">
+<h2 id="drawerTitle">✦ Tuts</h2>
+<button class="drawer-close" id="drawerClose" aria-label="Close menu">✕</button>
+</div>
+<div class="drawer-content">
+<div class="drawer-menu">
+<button class="drawer-item" data-sheet="Windows_11">Windows 11</button>
+<button class="drawer-item" data-sheet="MacOS_26">macOS</button>
+</div>
+</div>
+</div>
 <main>
 <div class="container">
-<div id="loading" class="loading">Loading cheat sheet...</div>
+<div id="loading" class="loading">Loading tut...</div>
 <div id="error" class="error" style="display:none"></div>
 <div id="content" style="display:none"></div>
 </div>
@@ -87,11 +118,48 @@ localStorage.setItem('tutorius-theme',now);
 html.setAttribute('data-theme',localStorage.getItem('tutorius-theme')||'dark');
 modeBtn.textContent=html.getAttribute('data-theme')==='dark'?'☾':'☀︎';
 
+// Drawer functionality
+const drawer=document.getElementById('drawer');
+const drawerOverlay=document.getElementById('drawerOverlay');
+const tutsMenuBtn=document.getElementById('tutsMenuBtn');
+const drawerClose=document.getElementById('drawerClose');
+
+function openDrawer(){
+drawer.classList.add('active');
+drawerOverlay.classList.add('active');
+tutsMenuBtn.setAttribute('aria-expanded','true');
+// Focus the close button for accessibility
+setTimeout(()=>drawerClose.focus(),100);
+}
+
+function closeDrawer(){
+drawer.classList.remove('active');
+drawerOverlay.classList.remove('active');
+tutsMenuBtn.setAttribute('aria-expanded','false');
+// Return focus to the button that opened the drawer
+tutsMenuBtn.focus();
+}
+
+tutsMenuBtn.addEventListener('click',(e)=>{
+e.preventDefault();
+openDrawer();
+});
+
+drawerClose.addEventListener('click',closeDrawer);
+drawerOverlay.addEventListener('click',closeDrawer);
+
+// Close drawer on escape key
+document.addEventListener('keydown',(e)=>{
+if(e.key==='Escape'&&drawer.classList.contains('active')){
+closeDrawer();
+}
+});
+
 // Cheat sheet loader
 const contentDiv=document.getElementById('content');
 const loadingDiv=document.getElementById('loading');
 const errorDiv=document.getElementById('error');
-const sheetButtons=document.querySelectorAll('.sheet-btn');
+const drawerItems=document.querySelectorAll('.drawer-item');
 
 // Get sheet from URL parameter or default to Windows_11
 const urlParams=new URLSearchParams(window.location.search);
@@ -204,7 +272,7 @@ const newUrl=new URL(window.location);
 newUrl.searchParams.set('sheet',sheetName);
 window.history.pushState({},'',newUrl);
 // Update active button
-sheetButtons.forEach(btn=>{
+drawerItems.forEach(btn=>{
 if(btn.dataset.sheet===sheetName){
 btn.classList.add('active');
 }else{
@@ -221,18 +289,20 @@ const html=parseMarkdown(markdown);  // Note: parseMarkdown() escapes HTML entit
 contentDiv.innerHTML=html;
 contentDiv.style.display='block';
 loadingDiv.style.display='none';
+// Close drawer after selection
+closeDrawer();
 // Scroll to top
 window.scrollTo({top:0,behavior:'smooth'});
 }catch(error){
 console.error('Error loading sheet:',error);
-errorDiv.textContent=`Failed to load cheat sheet: ${error.message}`;
+errorDiv.textContent=`Failed to load tut: ${error.message}`;
 errorDiv.style.display='block';
 loadingDiv.style.display='none';
 }
 }
 
-// Add click handlers to sheet buttons
-sheetButtons.forEach(btn=>{
+// Add click handlers to drawer items
+drawerItems.forEach(btn=>{
 btn.addEventListener('click',()=>{
 loadSheet(btn.dataset.sheet);
 });

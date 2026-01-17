@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>FortiGate Cheat Sheet · Tutorius</title>
+<title>FortiGate Tut · Tutorius</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#050208;--bg-alt:#140021;--accent:#7b2cff;--accent-lite:rgba(123,44,255,.18);--text:#f4f1ff;--text-muted:#bfb7ff;--radius:18px;--transition:.45s cubic-bezier(.4,.2,.2,1)}
@@ -16,6 +16,9 @@ body::before{content:"";position:fixed;inset:0;background-image:radial-gradient(
 header{position:sticky;top:0;z-index:10;background:rgba(20,0,33,.85);backdrop-filter:blur(10px);box-shadow:0 2px 10px rgba(0,0,0,.3)}
 nav{max-width:1200px;margin:0 auto;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 nav .logo{font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--text)}
+nav ul{display:flex;gap:2rem;list-style:none;align-items:center}
+nav a{color:var(--text);text-decoration:none;position:relative;font-weight:600;font-size:.95rem;transition:color var(--transition)}
+nav a:hover{color:var(--accent)}
 .nav-right{display:flex;gap:1rem;align-items:center}
 .mode-toggle{border:none;background:var(--bg-alt);color:var(--text);padding:.55rem 1rem;font-weight:600;border-radius:8px;cursor:pointer;transition:background var(--transition)}
 .mode-toggle:hover{background:var(--accent-lite)}
@@ -60,6 +63,10 @@ nav{flex-direction:column;align-items:flex-start}
 <header>
 <nav>
 <a class="logo" href="index.html">Tutorius</a>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="cheatsheet.html">Tuts</a></li>
+</ul>
 <div class="nav-right">
 <button class="mode-toggle" id="modeBtn">☾</button>
 </div>
@@ -92,7 +99,7 @@ nav{flex-direction:column;align-items:flex-start}
 </div>
 
 <div class="content">
-<h1>🔥 FortiGate Cheat Sheet for System Admins</h1>
+<h1>🔥 FortiGate Tut for System Admins</h1>
 <p><em>A comprehensive guide for navigating, configuring, and troubleshooting Fortinet FortiGate firewalls. Perfect for system administrators and FortiGate engineers.</em></p>
 
 <hr>
