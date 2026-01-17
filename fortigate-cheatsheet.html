@@ -51,11 +51,9 @@ nav{flex-direction:column;align-items:flex-start}
 .content h1{font-size:2rem}
 .content h2{font-size:1.5rem}
 }
-@media(prefers-color-scheme:light){
 :root[data-theme='light']{--bg:#fff;--bg-alt:#fafafa;--text:#212121;--text-muted:#555;--accent:#5c2dff;--accent-lite:rgba(92,45,255,.18)}
-.content pre{background:#f5f5f5}
-.content pre code{color:#333}
-}
+:root[data-theme='light'] .content pre{background:#f5f5f5}
+:root[data-theme='light'] .content pre code{color:#333}
 </style>
 </head>
 <body>
@@ -767,10 +765,10 @@ Made with ✦ by Joe Rice · © 2025 Tutorius
 const modeBtn=document.getElementById('modeBtn');
 const html=document.documentElement;
 modeBtn.addEventListener('click',()=>{
-const now=html.getAttribute('data-theme')==='dark'?'light':'dark';
-html.setAttribute('data-theme',now);
-modeBtn.textContent=now==='dark'?'☾':'☀︎';
-localStorage.setItem('tutorius-theme',now);
+const newTheme=html.getAttribute('data-theme')==='dark'?'light':'dark';
+html.setAttribute('data-theme',newTheme);
+modeBtn.textContent=newTheme==='dark'?'☾':'☀︎';
+localStorage.setItem('tutorius-theme',newTheme);
 });
 html.setAttribute('data-theme',localStorage.getItem('tutorius-theme')||'dark');
 modeBtn.textContent=html.getAttribute('data-theme')==='dark'?'☾':'☀︎';
